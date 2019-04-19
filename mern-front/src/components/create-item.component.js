@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import axios from 'axios';
 
 export default class CreateItem extends Component {
 
@@ -33,6 +34,16 @@ export default class CreateItem extends Component {
         console.log(`Responsible: ${this.state.item_responsible}`);
         console.log(`Priority: ${this.state.item_priority}`);
         console.log(`Completed: ${this.state.item_complete}`);
+
+        const newItem = {
+            item_description: this.state.item_description,
+            item_responsible: this.state.item_responsible,
+            item_priority: this.state.item_priority,
+            item_complete: this.state.item_complete,
+        }
+
+        axios.post('http://localhost:4000/items/add', newItem)
+            .then(res => console.log(res.data));
 
         this.setState({
             item_description: '',

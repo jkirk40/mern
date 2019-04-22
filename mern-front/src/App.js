@@ -39,6 +39,7 @@ if (localStorage.jwtToken) {
 }
 
 class App extends Component {
+
   onLogoutClick = e => {
     e.preventDefault();
     this.props.logoutUser();
@@ -53,10 +54,10 @@ class App extends Component {
             <Route path="/" exact component={Landing} />
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
-            <Route path="/edit/:id" component={EditItem} />
-            <Route path="/create" component={CreateItem} />
             <Switch>
-              <PrivateRoute exact path="/list" component={ItemList} />
+              <PrivateRoute path="/list" component={ItemList} />
+              <PrivateRoute path="/edit/:id" component={EditItem} />
+              <PrivateRoute path="/create" component={CreateItem} />
             </Switch>
           </div>
         </Router>

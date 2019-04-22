@@ -1,9 +1,17 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Link} from "react-router-dom";
+import { Link} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "./logo.svg";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { logoutUser } from "./actions/authActions";
 
 class Navbar extends Component {
+
+  onLogoutClick = e => {
+    e.preventDefault();
+    this.props.logoutUser();
+  };
 
   render() {
     return (
@@ -21,6 +29,9 @@ class Navbar extends Component {
             <li className="navbar-item">
               <Link to="/create" className="nav-link">Create Item</Link>
             </li>
+            <li className="navbar-item">
+              <a className="nav-link" onClick={this.onLogoutClick}>Log Out</a>
+            </li>
           </ul>
         </div>
       </nav>
@@ -28,4 +39,14 @@ class Navbar extends Component {
   }
 }
 
-export default Navbar;
+Navbar.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+export default connect(
+  mapStateToProps,
+  { logoutUser }
+)(Navbar);

@@ -15,7 +15,7 @@ class App extends Component {
             <a className="navbar-brand" href="https://github.com/jkirk40" target="_blank">
               <img src={logo} width="30" height="30" alt="react logo"/>
             </a>
-            <Link to="/" classname="navbar-brand">Home</Link>
+            <Link to="/" className="navbar-brand">Home</Link>
             {/* <div className="collapse nav-collapse"> */}
             <div className="nav-collapse">
               <ul className="navbar-nav mr-auto">

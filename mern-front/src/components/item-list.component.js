@@ -4,9 +4,9 @@ import axios from 'axios';
 
 const Item = props => (
     <tr>
-        <td>{props.item.item_description}</td>
-        <td>{props.item.item_responsible}</td>
-        <td>{props.item.item_priority}</td>
+        <td className={props.item.item_complete ? 'completed' : ''}>{props.item.item_description}</td>
+        <td className={props.item.item_complete ? 'completed' : ''}>{props.item.item_responsible}</td>
+        <td className={props.item.item_complete ? 'completed' : ''}>{props.item.item_priority}</td>
         <td>
             <Link to={"/edit/"+props.item._id}>Edit</Link>
         </td>
@@ -22,6 +22,16 @@ export default class ItemList extends Component {
     }
 
     componentDidMount() {
+        axios.get('http://localhost:4000/items/')
+            .then(res => {
+                this.setState({items: res.data});
+            })
+            .catch(function(err) {
+                console.log(err);
+            })
+    }
+
+    componentDidUpdate() {
         axios.get('http://localhost:4000/items/')
             .then(res => {
                 this.setState({items: res.data});

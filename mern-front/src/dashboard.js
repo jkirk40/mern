@@ -10,13 +10,10 @@ import { connect } from "react-redux";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import Landing from "./components/landing";
-import Login from "./components/login";
-import Register from "./components/register";
 import CreateItem from "./components/create-item.component";
 import EditItem from "./components/edit-item.component";
 import ItemList from "./components/item-list.component";
 import PrivateRoute from "./components/PrivateRoute";
-import Navbar from "./navbar";
 import logo from "./logo.svg";
 
 // Check for token to keep user logged in
@@ -49,10 +46,27 @@ class App extends Component {
       <Provider store={store}>
         <Router>
           <div className="container">
-            <Navbar />
+            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+              <a className="navbar-brand" href="https://github.com/jkirk40" target="_blank">
+                <img src={logo} width="30" height="30" alt="react logo"/>
+              </a>
+              <Link to="/" className="navbar-brand">Home!</Link>
+              {/* <div className="collapse nav-collapse"> */}
+              <div className="nav-collapse">
+                <ul className="navbar-nav mr-auto">
+                  <li className="navbar-item">
+                    <Link to="/" className="nav-link">Item List</Link>
+                  </li>
+                  <li className="navbar-item">
+                    <Link to="/create" className="nav-link">Create Item</Link>
+                  </li>
+                  <li className="navbar-item" onClick={this.onLogoutClick}>
+                      Logout
+                  </li>
+                </ul>
+              </div>
+            </nav>
             <Route path="/" exact component={Landing} />
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
             <Route path="/edit/:id" component={EditItem} />
             <Route path="/create" component={CreateItem} />
             <Switch>
@@ -65,4 +79,14 @@ class App extends Component {
   }
 }
 
-export default App;
+App.propTypes = {
+  logoutUser: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired
+};
+const mapStateToProps = state => ({
+  auth: state.auth
+});
+export default connect(
+  mapStateToProps,
+  { logoutUser }
+)(App);

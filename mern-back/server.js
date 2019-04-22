@@ -5,6 +5,9 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const itemRoutes = express.Router();
 const PORT = 4000;
+const passport = require("passport");
+
+const users = require("./routes/api/users");
 
 let Item = require('./item.model');
 
@@ -65,6 +68,14 @@ itemRoutes.route('/update/:id').post(function(req, res){
             })
     })
 })
+
+// Passport middleware
+app.use(passport.initialize());
+// Passport config
+require("./config/passport")(passport);
+// Routes
+app.use("/api/users", users);
+
 app.use('/items', itemRoutes);
 
 app.listen(PORT, function() {

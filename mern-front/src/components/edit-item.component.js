@@ -17,7 +17,7 @@ class EditItem extends Component {
     }
 
     componentDidMount(){
-        axios.get('http://localhost:4000/items/' + this.props.match.params.id)
+        axios.get('http://localhost:4000/items/item/' + this.props.match.params.id)
             .then(response => {
                 this.setState({
                     item_description: response.data.item_description,
@@ -54,7 +54,7 @@ class EditItem extends Component {
         axios.post('http://localhost:4000/items/update/'+this.props.match.params.id, obj)
             .then(res => console.log(res.data));
 
-        this.props.history.push('/');
+        this.props.history.push('/list');
     }
 
     render() {

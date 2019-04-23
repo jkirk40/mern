@@ -32,7 +32,7 @@ itemRoutes.route('/:user').get(function(req, res) {
     });
 });
 
-itemRoutes.route('/:id').get(function(req, res){
+itemRoutes.route('/item/:id').get(function(req, res){
     let id = req.params.id;
     Item.findById(id, function(err, item) {
         res.json(item);

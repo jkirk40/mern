@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import axios from 'axios';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
 const Item = props => (
     <tr>
@@ -13,7 +15,7 @@ const Item = props => (
     </tr>
 )
 
-export default class ItemList extends Component {
+class ItemList extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -22,7 +24,8 @@ export default class ItemList extends Component {
     }
 
     componentDidMount() {
-        axios.get('http://localhost:4000/items/')
+        console.log(this.props);
+        axios.get('http://localhost:4000/items/'+this.props.auth.user.id)
             .then(res => {
                 this.setState({items: res.data});
             })
@@ -32,7 +35,7 @@ export default class ItemList extends Component {
     }
 
     componentDidUpdate() {
-        axios.get('http://localhost:4000/items/')
+        axios.get('http://localhost:4000/items/'+this.props.auth.user.id)
             .then(res => {
                 this.setState({items: res.data});
             })
@@ -68,3 +71,14 @@ export default class ItemList extends Component {
         )
     }
 }
+
+ItemList.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+const mapStateToProps = state => ({
+    auth: state.auth,
+    errors: state.errors
+});
+export default connect(
+    mapStateToProps
+)(ItemList);

@@ -41,12 +41,14 @@ class CreateItem extends Component {
         console.log(`Responsible: ${this.state.item_responsible}`);
         console.log(`Priority: ${this.state.item_priority}`);
         console.log(`Completed: ${this.state.item_complete}`);
+        console.log(`User: ${this.props.auth.user.id}`);
 
         const newItem = {
             item_description: this.state.item_description,
             item_responsible: this.state.item_responsible,
             item_priority: this.state.item_priority,
             item_complete: this.state.item_complete,
+            item_owner: this.props.auth.user.id
         }
 
         axios.post('http://localhost:4000/items/add', newItem)

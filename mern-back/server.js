@@ -21,8 +21,9 @@ connection.once('open', function() {
     console.log('mongodb database connection established successfully');
 })
 
-itemRoutes.route('/').get(function(req, res) {
-    Item.find(function(err, items) {
+itemRoutes.route('/:user').get(function(req, res) {
+    query = {item_owner: req.params.user};
+    Item.find(query, function(err, items) {
         if(err) {
             console.log(err);
         } else {

@@ -12,11 +12,11 @@ class Register extends Component {
         super();
 
         this.state = {
-        name: "",
-        email: "",
-        password: "",
-        password2: "",
-        errors: {}
+            name: "",
+            email: "",
+            password: "",
+            password2: "",
+            errors: {}
         };
     }
 

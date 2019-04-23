@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
-export default class CreateItem extends Component {
+class CreateItem extends Component {
 
     constructor(props){
         super(props);
@@ -12,6 +14,11 @@ export default class CreateItem extends Component {
             item_priority: '',
             item_complete: false
         }
+    }
+
+    componentDidMount() {
+        console.log(this.props);
+        console.log(this.props.auth);
     }
 
     onChangeFormText = (e) => {
@@ -119,3 +126,14 @@ export default class CreateItem extends Component {
         )
     }
 }
+
+CreateItem.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+const mapStateToProps = state => ({
+    auth: state.auth,
+    errors: state.errors
+});
+export default connect(
+    mapStateToProps
+)(CreateItem);

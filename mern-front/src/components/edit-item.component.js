@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
-export default class EditItem extends Component {
+class EditItem extends Component {
 
     constructor(props) {
         super(props);
@@ -133,3 +135,14 @@ export default class EditItem extends Component {
         )
     }
 }
+
+EditItem.propTypes = {
+    auth: PropTypes.object.isRequired
+};
+const mapStateToProps = state => ({
+    auth: state.auth,
+    errors: state.errors
+});
+export default connect(
+    mapStateToProps
+)(EditItem);

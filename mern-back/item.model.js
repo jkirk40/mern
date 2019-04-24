@@ -13,6 +13,9 @@ let Item = new Schema({
     },
     item_complete: {
         type: Boolean
+    },
+    item_owner:{
+        type: String
     }
 });
 

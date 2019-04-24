@@ -5,6 +5,9 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const itemRoutes = express.Router();
 const PORT = 4000;
+const passport = require("passport");
+
+const users = require("./routes/api/users");
 
 let Item = require('./item.model');
 
@@ -18,8 +21,9 @@ connection.once('open', function() {
     console.log('mongodb database connection established successfully');
 })
 
-itemRoutes.route('/').get(function(req, res) {
-    Item.find(function(err, items) {
+itemRoutes.route('/:user').get(function(req, res) {
+    query = {item_owner: req.params.user};
+    Item.find(query, function(err, items) {
         if(err) {
             console.log(err);
         } else {
@@ -28,7 +32,7 @@ itemRoutes.route('/').get(function(req, res) {
     });
 });
 
-itemRoutes.route('/:id').get(function(req, res){
+itemRoutes.route('/item/:id').get(function(req, res){
     let id = req.params.id;
     Item.findById(id, function(err, item) {
         res.json(item);
@@ -65,6 +69,14 @@ itemRoutes.route('/update/:id').post(function(req, res){
             })
     })
 })
+
+// Passport middleware
+app.use(passport.initialize());
+// Passport config
+require("./config/passport")(passport);
+// Routes
+app.use("/api/users", users);
+
 app.use('/items', itemRoutes);
 
 app.listen(PORT, function() {

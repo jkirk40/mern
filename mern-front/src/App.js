@@ -1,38 +1,64 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route, Link} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch} from "react-router-dom";
+import jwt_decode from "jwt-decode";
+import setAuthToken from "./utils/setAuthToken";
+import { setCurrentUser, logoutUser } from "./actions/authActions";
+import {Provider} from 'react-redux';
+import store from "./store";
+
 import "bootstrap/dist/css/bootstrap.min.css";
+import Landing from "./components/landing";
+import Login from "./components/login";
+import Register from "./components/register";
 import CreateItem from "./components/create-item.component";
 import EditItem from "./components/edit-item.component";
 import ItemList from "./components/item-list.component";
-import logo from "./logo.svg";
+import PrivateRoute from "./components/PrivateRoute";
+import Navbar from "./navbar";
+
+// Check for token to keep user logged in
+if (localStorage.jwtToken) {
+  // Set auth token header auth
+  const token = localStorage.jwtToken;
+  setAuthToken(token);
+  // Decode token and get user info and exp
+  const decoded = jwt_decode(token);
+  // Set user and isAuthenticated
+  store.dispatch(setCurrentUser(decoded));
+// Check for expired token
+  const currentTime = Date.now() / 1000; // to get in milliseconds
+  if (decoded.exp < currentTime) {
+    // Logout user
+    store.dispatch(logoutUser());
+    // Redirect to login
+    window.location.href = "./login";
+  }
+}
 
 class App extends Component {
+
+  onLogoutClick = e => {
+    e.preventDefault();
+    this.props.logoutUser();
+  };
+
   render() {
     return (
-      <Router>
-        <div className="container">
-          <nav className="navbar navbar-expand-lg navbar-light bg-light">
-            <a className="navbar-brand" href="https://github.com/jkirk40" target="_blank">
-              <img src={logo} width="30" height="30" alt="react logo"/>
-            </a>
-            <Link to="/" classname="navbar-brand">Home</Link>
-            {/* <div className="collapse nav-collapse"> */}
-            <div className="nav-collapse">
-              <ul className="navbar-nav mr-auto">
-                <li className="navbar-item">
-                  <Link to="/" className="nav-link">Item List</Link>
-                </li>
-                <li className="navbar-item">
-                  <Link to="/create" className="nav-link">Create Item</Link>
-                </li>
-              </ul>
-            </div>
-          </nav>
-          <Route path="/" exact component={ItemList} />
-          <Route path="/edit/:id" component={EditItem} />
-          <Route path="/create" component={CreateItem} />
-        </div>
-      </Router>
+      <Provider store={store}>
+        <Router>
+          <div className="container">
+            <Navbar />
+            <Route path="/" exact component={Landing} />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+            <Switch>
+              <PrivateRoute path="/list" component={ItemList} />
+              <PrivateRoute path="/edit/:id" component={EditItem} />
+              <PrivateRoute path="/create" component={CreateItem} />
+            </Switch>
+          </div>
+        </Router>
+      </Provider>
     );
   }
 }
